@@ -43,7 +43,6 @@ router.post('/login',async (req,res)=>{
             occupation: user.occupation,
             bio: user.bio
         };
-        console.log(userResponse);
         res.send({token:token, userResponse: userResponse})
     } catch (error) {
         res.status(400).send(error.message)

@@ -24,3 +24,4 @@ const certificateSchema = new mongoose.Schema({
 
 
 const Certificate = mongoose.model('Certificate', certificateSchema);
+module.exports = Certificate;

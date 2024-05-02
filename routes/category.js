@@ -8,7 +8,7 @@ router.post('/category', authenticate, async (req, res) => {
     try {
         const category = new Category(req.body);
         await category.save();
-        res.status(201).send(category);
+        res.status(201).json({ id: category._id, name: category.name });
     } catch (error) {
         res.status(400).send(error);
     }
