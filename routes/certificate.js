@@ -38,6 +38,36 @@ router.get('/certificate', async (req, res) => {
     }
 });
 
+// Get certificate by id
+router.get('/certificate/:id', async (req, res) => {
+    const certificateId = req.params.id;
+
+    try {
+        const certificate = await Certificate.findById(certificateId)
+            .populate('category', 'name') // Populate the 'category' field with only the 'name' property
+            .populate('subCategory', 'name') // Populate the 'subCategory' field with only the 'name' property
+            .exec();
+
+        if (!certificate) {
+            return res.status(404).send('Certificate not found');
+        }
+
+        // Extract category and subcategory names from populated objects
+        const certificateWithNames = {
+            _id: certificate._id,
+            name: certificate.name,
+            category: certificate.category.name, // Access the name of the category
+            subCategory: certificate.subCategory.name, // Access the name of the subcategory
+            createdAt: new Date(certificate.createdAt).toLocaleDateString(),
+            updatedAt: new Date(certificate.updatedAt).toLocaleDateString()
+        };
+
+        res.send(certificateWithNames);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
 // Update a certificate by id
 router.patch('/certificate/:id', authenticate, async (req, res) => {
     const updates = Object.keys(req.body);
