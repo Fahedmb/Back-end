@@ -1,17 +1,20 @@
-const jwt =require('jsonwebtoken')
 
-const authenticate = (req,res,next)=>{
-    const token = req.header('Authorization')
-    if(!token || !token.startsWith('Bearer ')){
-        return res.status(401).send('Authentication failed:invalid token')
+
+const authenticate = (req,res,next) => {
+    console.log(req.cookies.token)
+
+    const token  = req.cookies.token;
+    console.log(token)
+    if( !token ){ 
+        return res.status(401).send('Authentication failedddd:invalid token')
     }
     try{
-        const tokenData = token.split(' ')[1]
-        const decodedToken = jwt.verify(tokenData,process.env.JWT_SECRET)
-        req.userId = decodedToken._id
+        const tokenData = token.split('.')[1] // Bearer xxxxxx
+        req.userId=tokenData._id;
         next()
-    }catch(error){
-        return res.status(401).send('Authentication failed :invalid token')
+    }catch (error){
+        res.status(401).send('Authentifcation failedd :invalid token')
     }
-}
-module.exports = authenticate
+} 
+
+module.exports = authenticate;

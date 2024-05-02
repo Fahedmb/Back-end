@@ -4,7 +4,7 @@ const authenticate = require('../middleware/authenticate');
 const Certificate = require('../models/certificate');
 
 // Create a certificate
-router.post('/certificate', authenticate, async (req, res) => {
+router.post('/certificate', async (req, res) => {
     try {
         const certificate = new Certificate(req.body);
         await certificate.save();
@@ -15,10 +15,24 @@ router.post('/certificate', authenticate, async (req, res) => {
 });
 
 // Get all certificates
-router.get('/certificate', authenticate, async (req, res) => {
+router.get('/certificate', async (req, res) => {
     try {
-        const certificates = await Certificate.find();
-        res.send(certificates);
+        const certificates = await Certificate.find()
+            .populate('category', 'name') // Populate the 'category' field with only the 'name' property
+            .populate('subCategory', 'name') // Populate the 'subCategory' field with only the 'name' property
+            .exec();
+
+        // Extract category names from populated category objects
+        const certificatesWithCategoryNames = certificates.map(certificate => {
+            return {
+                _id: certificate._id,
+                name: certificate.name,
+                category: certificate.category.name, // Access the name of the category
+                subCategory: certificate.subCategory.name
+            };
+        });
+
+        res.send(certificatesWithCategoryNames);
     } catch (error) {
         res.status(500).send(error);
     }
