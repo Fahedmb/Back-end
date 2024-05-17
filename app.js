@@ -5,6 +5,8 @@ app.use(cors());
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
+const bodyParser =require('body-parser')
+
 dotenv.config();
 const authRoutes = require('./routes/auth');
 const categoryRoutes = require('./routes/category');
@@ -17,6 +19,8 @@ const userRoutes = require('./routes/user');
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 
 const MONGODB_URI = process.env.MONGODB_URI;
 const PORT = process.env.PORT || 4000;

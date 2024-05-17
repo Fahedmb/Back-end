@@ -49,11 +49,13 @@ router.post('/login',async (req,res)=>{
     }});
 
 //logout
-router.post('/logout',async (req,res)=>{
+router.post('/logout', (req, res) => {
     try {
-        res.send('User logged out')
+        // Clear the token cookie by setting it to an empty value and setting its expiration to a past date
+        res.clearCookie('token'); // Replace 'token' with your cookie name
+        res.status(200).send('User loggedddd out');
     } catch (error) {
-        res.status(500).send('Error: '+error.message)
+        res.status(500).send('Error: ' + error.message);
     }
 });
 

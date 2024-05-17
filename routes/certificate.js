@@ -28,7 +28,8 @@ router.get('/certificate', async (req, res) => {
                 _id: certificate._id,
                 name: certificate.name,
                 category: certificate.category.name, // Access the name of the category
-                subCategory: certificate.subCategory.name
+                subCategory: certificate.subCategory.name,
+                createdAt: new Date(certificate.createdAt).toLocaleDateString()
             };
         });
 
